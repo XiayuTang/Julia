@@ -1,10 +1,9 @@
 # MATRIX COMPUTATIONS 4th Edition Gene H. Golub, Charles F. Van Loan
 # Chapter 1 Matrix Multiplication
 """
-    dot(x, y) -> c
+    dot(x::AbstractVector, y::AbstractVector) -> Real
 
-Algorithm 1.1.1 (Dot Product) If `x, y ∈ ℝⁿ`, then this algorithm computes their dot
-product `c = xᵀy`.
+Algorithm 1.1.1 (Dot Product) If `x, y ∈ ℝⁿ`, then this algorithm computes their dot product `c = xᵀy`.
 """
 function dot(x::AbstractVector{T}, y::AbstractVector) where T <: Signed
     n = length(x)
@@ -26,7 +25,7 @@ function dot(x::AbstractVector{T}, y::AbstractVector) where T <: AbstractFloat
 end
 
 """
-    saxpy!(x, y, a) -> y
+    saxpy!(x::AbstractVector, y::AbstractVector, a::Real)
 
 Algorithm 1.1.2 (Saxpy) If `x`, `y` ∈ ℝⁿ and `a` ∈ ℝ, then this algorithm overwrites
 `y` with ``y + ax``.
@@ -40,7 +39,7 @@ function saxpy!(x::AbstractVector, y::AbstractVector, a::Real)
 end
 
 """
-    rogaxpy!(A, x, y) -> y
+    rogaxpy!(A::AbstractMatrix, x::AbstractVector, y::AbstractVector)
 
 Algorithm 1.1.3 (Row-Oriented Gaxpy) If `A` ∈ ``ℝ^{m×n}``, `x` ∈ ℝⁿ, and `y` ∈ ℝᵐ, then this algorithm overwrites `y` with ``Ax + y``.
 """
@@ -54,7 +53,7 @@ function rogaxpy!(A::AbstractMatrix, x::AbstractVector, y::AbstractVector)
 end
 
 """
-    cogaxpy!(A, x, y) -> y
+    cogaxpy!(A::AbstractMatrix, x::AbstractVector, y::AbstractVector)
 
 Algorithm 1.1.4 (Column-Oriented Gaxpy) If `A` ∈ ``ℝ^{m×n}``, `x` ∈ ℝⁿ, and
 `y` ∈ ℝᵐ, then this algorithm overwrites `y` with  ``Ax+y``.
@@ -69,7 +68,7 @@ function cogaxpy!(A::AbstractMatrix, x::AbstractVector, y::AbstractVector)
 end
 
 """
-    matmul!(A, B, C) -> C
+    matmul!(A::AbstractMatrix, B::AbstractMatrix, C::AbstractMatrix)
 
 Algorithm 1.1.5 (ijk Matrix Multiplication) If `A` ∈ ``ℝ^{m×r}``, `B` ∈ ``ℝ^{r×n}``, and `C` ∈ ``ℝ^{m×n}`` are give, and this algorithm overwrites `C`
 with ``C + AB``.
