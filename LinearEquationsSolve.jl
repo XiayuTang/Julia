@@ -1,5 +1,5 @@
-module LinearEquationsSolve
-export diagchange!,jacobi
+# module LinearEquationsSolve
+# export diagchange!,jacobi
 using LinearAlgebra
 
 
@@ -137,4 +137,4 @@ function jacobi(A::AbstractMatrix{T},b::AbstractVector{T},x⁰::AbstractVector{T
         x⁰ = x¹
     end
 end
-end  # module
+# end  # module
