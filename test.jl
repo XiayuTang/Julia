@@ -25,3 +25,22 @@
 # end
 # using LinearAlgebra
 # Diagonal
+# function test1()
+#     s = 0.0
+#     for i in 1:100
+#         s += 1/i
+#     end
+# end
+# @time test1()
+# using LinearAlgebra
+# diagind
+using LinearAlgebra
+function test()
+    for _ in 1:100
+        A = rand(3000, 2000)
+        B = rand(2000, 1000)
+        A * B
+    end
+    nothing
+end
+@time test() 
