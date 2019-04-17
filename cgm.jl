@@ -1,4 +1,3 @@
-using Juno
 using LinearAlgebra
 """
     cgm(A::AbstractMatrix{T}, b::AbstractVector{T}, x₀::AbstractVector{T}) where T <: AbstractFloat -> AbstractVector
@@ -28,7 +27,7 @@ function cgm(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}) where T <: AbstractFlo
         # println(α)
         x = x₀ + α * d₀
         # println(x)
-        r = r₀ + α * A * d₀
+        r = r₀ - α * A * d₀
         # println(r)
         β = (r' ⋅ r) / (r₀' ⋅ r₀)
         # println(β)
@@ -39,14 +38,5 @@ function cgm(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}) where T <: AbstractFlo
         x₀ = x
         d₀ = d
     end
-    # x₀
-    nothing
+    x₀, num
 end
-
-function test()
-    A = Matrix{Float64}[2 2;2 5]
-    b = [6.0;3.0]
-    x₀ = zeros(Float64, 2)
-    cgm(A,b,x₀)
-end
-test()
