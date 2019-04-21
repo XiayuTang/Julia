@@ -1,4 +1,4 @@
-# push!(LOAD_PATH,".")
+push!(LOAD_PATH,".")
 using LinearEquationsSolve
 using LinearAlgebra
 # a = [2.0 1.0; 1.0 1.0];
@@ -14,7 +14,7 @@ function generateA(n::Int)
     @assert n%2 == 0
     temp = -1*ones(n-1)
     A = diagm(0=>3*ones(12),1=>temp, -1=>temp);
-    for i in 1:12
+    for i in 1:n
         if i==n/2 || i==(n/2+1)
             continue
         end
@@ -37,4 +37,4 @@ end
 n = 200
 A = generateA(n)
 b = generateb(n)
-cg(A, b, zeros(n))
+jacobi(A, b, zeros(n))
