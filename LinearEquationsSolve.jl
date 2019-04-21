@@ -1,5 +1,5 @@
 module LinearEquationsSolve  # 模板
-export gauss_seidel
+export gauss_seidel,cg
 using LinearAlgebra
 
 

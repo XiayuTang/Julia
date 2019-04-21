@@ -82,3 +82,11 @@ function matmul!(A::AbstractMatrix, B::AbstractMatrix, C::AbstractMatrix)
         C[i, j] += A[i, k] * B[k, j]
     end
 end
+
+function gaxpyLU(A::Matrix)
+    m, n = size(A)
+    @assert m == n
+    L = ones(n, n)
+    U = zeros(n, n)
+    
+end
