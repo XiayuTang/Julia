@@ -3,14 +3,12 @@ module LinearSystem  # 模板
 export gauss_seidel, cg, jacobi
 using LinearAlgebra
 
-U = Union{Integer, AbstractFloat}
-
 """
     isrowzero(A)
 
 判断矩阵A的每一行是否全为零
 """
-function isrowzero(A::AbstractMatrix{T}) where T <: U
+function isrowzero(A::Matrix{Float64})
     n = size(A,1)
     o = zeros(eltype(A),n)
     for i in 1:n
@@ -27,7 +25,7 @@ end
 
 判断矩阵A的每一列是否全为零
 """
-function iscolzero(A::AbstractMatrix{T}) where T<:U
+function iscolzero(A::AbstractMatrix{Float64})
     n = size(A,2)
     o = zeros(eltype(A),n)
     for i ∈ 1:n
@@ -40,12 +38,12 @@ end
 
 
 """
-    diagchange!(A::Matrix{T})
+    diagchange!(A::Matrix{Float64})
 
 若矩阵A的对角元的某几个为0，
 则通过初等行变换将0转换为非零元素
 """
-function diagchange!(A::Matrix{T}) where T<:U
+function diagchange!(A::Matrix{Float64})
     m,n = size(A)
     @assert m == n  # 要求 A为方阵
     @assert !isrowzero(A)
@@ -93,7 +91,7 @@ Jacobi迭代法求解线性方程组 ``Ax = b``
 34
 ```
 """
-function jacobi(A::Matrix{T},b::Vector{T},x⁰::Vector{T},ϵ::Float64=1e-5,maxiter::Int=100) where T<:U    
+function jacobi(A::Matrix{Float64},b::Vector{Float64},x⁰::Vector{Float64},ϵ::Float64=1e-5,maxiter::Int=100)
     diagchange!(A)
     n = 0
     D = Diagonal(diag(A))
@@ -143,7 +141,7 @@ Gauss-Seidel迭代法求解线性方程组 ``Ax = b``
 ```
 """
 
-function gauss_seidel(A::Matrix{T}, b::Vector{T}, x⁰::Vector{T}, ϵ::Float64=1e-5,maxiter::Int=100) where T <: U
+function gauss_seidel(A::Matrix{Float64}, b::Vector{Float64}, x⁰::Vector{Float64}, ϵ::Float64=1e-5,maxiter::Int=100)
     diagchange!(A)
     n = 0
     L = tril(A)
@@ -163,7 +161,7 @@ function gauss_seidel(A::Matrix{T}, b::Vector{T}, x⁰::Vector{T}, ϵ::Float64=1
     end
 end
 """
-    cg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}, e::Float64=1e-5) -> AbstractVector
+    cg(A::Matrix{Float64}, b::Vector{Float64}, x₀::Vector{Float64}, e::Float64=1e-5) -> AbstractVector
 
 共轭梯度法求解 ``Ax=b``
 
@@ -183,7 +181,7 @@ julia> x = cg(A,b,x₀)
  -0.9999999999999998
 ```
 """
-function cg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}, e::Float64=1e-5) where T<:U
+function cg(A::Matrix{Float64}, b::Vector{Float64}, x₀::Vector{Float64}, e::Float64=1e-5)
     @assert isposdef(A)  # 判断 A 是否为对称正定矩阵
     n = size(A, 1)
     @assert n == length(b) == length(x₀)  # 维度匹配
