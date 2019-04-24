@@ -1,14 +1,16 @@
-module LinearEquationsSolve  # 模板
+module LinearSystem  # 模板
+
 export gauss_seidel, cg, jacobi
 using LinearAlgebra
 
+U = Union{Integer, AbstractFloat}
 
 """
     isrowzero(A)
 
 判断矩阵A的每一行是否全为零
 """
-function isrowzero(A::AbstractMatrix)
+function isrowzero(A::AbstractMatrix{T}) where T <: U
     n = size(A,1)
     o = zeros(eltype(A),n)
     for i in 1:n
@@ -25,7 +27,7 @@ end
 
 判断矩阵A的每一列是否全为零
 """
-function iscolzero(A::AbstractMatrix)
+function iscolzero(A::AbstractMatrix{T}) where T<:U
     n = size(A,2)
     o = zeros(eltype(A),n)
     for i ∈ 1:n
@@ -38,12 +40,12 @@ end
 
 
 """
-    diagchange!(A::Matrix{T}) where T <: AbstractFloat
+    diagchange!(A::Matrix{T})
 
 若矩阵A的对角元的某几个为0，
 则通过初等行变换将0转换为非零元素
 """
-function diagchange!(A::Matrix{T}) where T <: AbstractFloat
+function diagchange!(A::Matrix{T}) where T<:U
     m,n = size(A)
     @assert m == n  # 要求 A为方阵
     @assert !isrowzero(A)
@@ -69,12 +71,12 @@ end
 Jacobi迭代法求解线性方程组 ``Ax = b``
 
 # Aguments
-- `A::AbstractMatrix{AbstractFloat}`  系数矩阵
-- `b::AbstractVector{AbstractFloat}`  常数项
-- `x⁰::AbstractVector{AbstractFloat}`  迭代初值
-- `ϵ::AbstractFloat=1e-5`  允许误差
-- `maxiter::Int=100`  最大迭代次数
-- `x::AbstractVector{AbstractFloat}`  方程组的近似解
+- `A`  系数矩阵
+- `b`  常数项
+- `x⁰`  迭代初值
+- `ϵ`  允许误差
+- `maxiter`  最大迭代次数
+- `x`  方程组的近似解
 - `n`  迭代次数
 
 # Example
@@ -91,7 +93,7 @@ Jacobi迭代法求解线性方程组 ``Ax = b``
 34
 ```
 """
-function jacobi(A::Matrix{T},b::Vector{T},x⁰::Vector{T},ϵ::Float64=1e-5,maxiter::Int=100) where T <: AbstractFloat
+function jacobi(A::Matrix{T},b::Vector{T},x⁰::Vector{T},ϵ::Float64=1e-5,maxiter::Int=100) where T<:U    
     diagchange!(A)
     n = 0
     D = Diagonal(diag(A))
@@ -118,12 +120,12 @@ end
 Gauss-Seidel迭代法求解线性方程组 ``Ax = b``
 
 # Aguments
-- `A::AbstractMatrix{AbstractFloat}`  系数矩阵
-- `b::AbstractVector{AbstractFloat}`  常数项
-- `x⁰::AbstractVector{AbstractFloat}`  迭代初值
-- `ϵ::AbstractFloat=1e-5`  允许误差
-- `maxiter::Int=100`  最大迭代次数
-- `x::AbstractVector{AbstractFloat}`  方程组的近似解
+- `A`  系数矩阵
+- `b`  常数项
+- `x⁰`  迭代初值
+- `ϵ`  允许误差
+- `maxiter`  最大迭代次数
+- `x⁰`  方程组的近似解
 - `n`  迭代次数
 
 # Example
@@ -141,7 +143,7 @@ Gauss-Seidel迭代法求解线性方程组 ``Ax = b``
 ```
 """
 
-function gauss_seidel(A::Matrix{T}, b::Vector{T}, x⁰::Vector{T}, ϵ::Float64=1e-5,maxiter::Int=100) where T <: AbstractFloat
+function gauss_seidel(A::Matrix{T}, b::Vector{T}, x⁰::Vector{T}, ϵ::Float64=1e-5,maxiter::Int=100) where T <: U
     diagchange!(A)
     n = 0
     L = tril(A)
@@ -161,7 +163,7 @@ function gauss_seidel(A::Matrix{T}, b::Vector{T}, x⁰::Vector{T}, ϵ::Float64=1
     end
 end
 """
-    cg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}, e::Float64=1e-5) where {T <: AbstractFloat} -> AbstractVector
+    cg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}, e::Float64=1e-5) -> AbstractVector
 
 共轭梯度法求解 ``Ax=b``
 
@@ -181,7 +183,7 @@ julia> x = cg(A,b,x₀)
  -0.9999999999999998
 ```
 """
-function cg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}, e::Float64=1e-5) where T <: AbstractFloat
+function cg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T}, e::Float64=1e-5) where T<:U
     @assert isposdef(A)  # 判断 A 是否为对称正定矩阵
     n = size(A, 1)
     @assert n == length(b) == length(x₀)  # 维度匹配
