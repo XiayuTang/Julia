@@ -3,12 +3,15 @@ module LinearSystem  # 模板
 export gauss_seidel, cg, jacobi
 using LinearAlgebra
 
+IntOrFloatVec = Union{Vector{Int8},Vector{Int16},Vector{Int32},Vector{Int64},Vector{Int128},Vector{Float16},Vector{Float32},Vector{Float64}}
+IntOrFloatMat = Union{Matrix{Int8},Matrix{Int16},Matrix{Int32},Matrix{Int64},Matrix{Int128},Matrix{Float16},Matrix{Float32},Matrix{Float64}}
+
 """
     isrowzero(A)
 
 判断矩阵A的每一行是否全为零
 """
-function isrowzero(A::Matrix{Float64})
+function isrowzero(A::IntOrFloatMat)
     n = size(A,1)
     o = zeros(eltype(A),n)
     for i in 1:n
@@ -25,7 +28,7 @@ end
 
 判断矩阵A的每一列是否全为零
 """
-function iscolzero(A::AbstractMatrix{Float64})
+function iscolzero(A::IntOrFloatMat)
     n = size(A,2)
     o = zeros(eltype(A),n)
     for i ∈ 1:n
@@ -38,12 +41,12 @@ end
 
 
 """
-    diagchange!(A::Matrix{Float64})
+    diagchange!(A::IntOrFloatMat)
 
 若矩阵A的对角元的某几个为0，
 则通过初等行变换将0转换为非零元素
 """
-function diagchange!(A::Matrix{Float64})
+function diagchange!(A::IntOrFloatMat)
     m,n = size(A)
     @assert m == n  # 要求 A为方阵
     @assert !isrowzero(A)
@@ -91,7 +94,7 @@ Jacobi迭代法求解线性方程组 ``Ax = b``
 34
 ```
 """
-function jacobi(A::Matrix{Float64},b::Vector{Float64},x⁰::Vector{Float64},ϵ::Float64=1e-5,maxiter::Int=100)
+function jacobi(A::IntOrFloatMat,b::IntOrFloatVec,x⁰::IntOrFloatVec,ϵ::Float64=1e-5,maxiter::Int=100)
     diagchange!(A)
     n = 0
     D = Diagonal(diag(A))
@@ -141,7 +144,7 @@ Gauss-Seidel迭代法求解线性方程组 ``Ax = b``
 ```
 """
 
-function gauss_seidel(A::Matrix{Float64}, b::Vector{Float64}, x⁰::Vector{Float64}, ϵ::Float64=1e-5,maxiter::Int=100)
+function gauss_seidel(A::IntOrFloatMat, b::IntOrFloatVec, x⁰::IntOrFloatVec, ϵ::Float64=1e-5,maxiter::Int=100)
     diagchange!(A)
     n = 0
     L = tril(A)
@@ -161,7 +164,7 @@ function gauss_seidel(A::Matrix{Float64}, b::Vector{Float64}, x⁰::Vector{Float
     end
 end
 """
-    cg(A::Matrix{Float64}, b::Vector{Float64}, x₀::Vector{Float64}, e::Float64=1e-5) -> AbstractVector
+    cg(A::IntOrFloatMat, b::IntOrFloatVec, x₀::IntOrFloatVec, e::Float64=1e-5) -> AbstractVector
 
 共轭梯度法求解 ``Ax=b``
 
@@ -172,7 +175,7 @@ end
 - `e` 允许最大误差
 # Examples
 ```julia
-julia> A = Matrix{Float64}([2 2;2 5]);
+julia> A = IntOrFloatMat([2 2;2 5]);
 julia> b = [6.0;3.0];
 julia> x₀ = zeros(Float64, 2);
 julia> x = cg(A,b,x₀)
@@ -181,7 +184,7 @@ julia> x = cg(A,b,x₀)
  -0.9999999999999998
 ```
 """
-function cg(A::Matrix{Float64}, b::Vector{Float64}, x₀::Vector{Float64}, e::Float64=1e-5)
+function cg(A::IntOrFloatMat, b::IntOrFloatVec, x₀::IntOrFloatVec, e::Float64=1e-5)
     @assert isposdef(A)  # 判断 A 是否为对称正定矩阵
     n = size(A, 1)
     @assert n == length(b) == length(x₀)  # 维度匹配
